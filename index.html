@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battleship Game</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⚓ Battleship Game</h1>
+      <button id="info-btn" class="info-btn">ℹ️ How to Play</button>
+    </header>
+
+    <!-- Game Mode Selection -->
+    <div id="mode-selection" class="mode-selection">
+      <h2>Choose Game Mode</h2>
+      <div class="mode-buttons">
+        <button id="vs-computer-btn" class="mode-btn">🤖 Play vs Computer</button>
+        <button id="two-player-btn" class="mode-btn">👥 Two Player Mode</button>
+      </div>
+    </div>
+
+    <!-- Ship Placement Phase -->
+    <div id="placement-phase" class="placement-phase hidden">
+      <div class="placement-info">
+        <h2 id="placement-title">Place Your Ships</h2>
+        <p id="placement-instructions">Drag and drop ships onto your board. Click a ship to rotate it.</p>
+      </div>
+      
+      <div class="placement-container">
+        <div class="ships-to-place" id="ships-container">
+          <h3>Ships to Place:</h3>
+          <div class="ship-list">
+            <div class="ship-item" draggable="true" data-length="5" data-direction="horizontal">
+              <span class="ship-name">Carrier (5)</span>
+              <div class="ship-preview carrier">
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+              </div>
+            </div>
+            <div class="ship-item" draggable="true" data-length="4" data-direction="horizontal">
+              <span class="ship-name">Battleship (4)</span>
+              <div class="ship-preview battleship">
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+              </div>
+            </div>
+            <div class="ship-item" draggable="true" data-length="3" data-direction="horizontal">
+              <span class="ship-name">Cruiser (3)</span>
+              <div class="ship-preview cruiser">
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+              </div>
+            </div>
+            <div class="ship-item" draggable="true" data-length="3" data-direction="horizontal">
+              <span class="ship-name">Submarine (3)</span>
+              <div class="ship-preview submarine">
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+              </div>
+            </div>
+            <div class="ship-item" draggable="true" data-length="2" data-direction="horizontal">
+              <span class="ship-name">Destroyer (2)</span>
+              <div class="ship-preview destroyer">
+                <div class="ship-cell"></div>
+                <div class="ship-cell"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="board-container">
+          <h3>Your Board</h3>
+          <div id="placement-board" class="board"></div>
+          <button id="start-game-btn" class="start-btn hidden">Start Game</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pass Device Screen (for 2-player mode) -->
+    <div id="pass-device-screen" class="pass-device hidden">
+      <div class="pass-device-content">
+        <h2>🔄 Pass Device</h2>
+        <p id="pass-message">It's Player 2's turn to place ships</p>
+        <p class="pass-instruction">Please pass the device to the next player</p>
+        <button id="ready-btn" class="ready-btn">I'm Ready!</button>
+      </div>
+    </div>
+
+    <!-- Game Phase -->
+    <div id="game-phase" class="game-phase hidden">
+      <div class="game-info">
+        <h2 id="turn-indicator">Your Turn</h2>
+        <p id="game-message">Click on enemy board to attack!</p>
+      </div>
+      
+      <div class="boards-container">
+        <div class="player-board-section">
+          <h3 id="player-label">Your Board</h3>
+          <div id="player-board" class="board"></div>
+        </div>
+        
+        <div class="enemy-board-section">
+          <h3 id="enemy-label">Enemy Board</h3>
+          <div id="enemy-board" class="board"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="game-over hidden">
+      <div class="game-over-content">
+        <h2 id="winner-message">🎉 You Win!</h2>
+        <button id="play-again-btn" class="play-again-btn">Play Again</button>
+      </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="info-modal" class="modal hidden">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>📖 How to Play Battleship</h2>
+        
+        <div class="info-section">
+          <h3>🎯 Objective</h3>
+          <p>Sink all of your opponent's ships before they sink yours!</p>
+        </div>
+
+        <div class="info-section">
+          <h3>🚢 Ships</h3>
+          <ul>
+            <li><strong>Carrier:</strong> 5 cells</li>
+            <li><strong>Battleship:</strong> 4 cells</li>
+            <li><strong>Cruiser:</strong> 3 cells</li>
+            <li><strong>Submarine:</strong> 3 cells</li>
+            <li><strong>Destroyer:</strong> 2 cells</li>
+          </ul>
+        </div>
+
+        <div class="info-section">
+          <h3>🎮 How to Play</h3>
+          <ol>
+            <li><strong>Choose Game Mode:</strong> Select vs Computer or Two Player</li>
+            <li><strong>Place Ships:</strong> Drag and drop ships onto your board. Click a ship to rotate it before placing.</li>
+            <li><strong>Take Turns:</strong> Click on the enemy board to attack. A red cell means you hit a ship, white means you missed.</li>
+            <li><strong>Win:</strong> First player to sink all enemy ships wins!</li>
+          </ol>
+        </div>
+
+        <div class="info-section">
+          <h3>💡 Tips</h3>
+          <ul>
+            <li>Ships cannot overlap or go outside the board</li>
+            <li>Once all ships are placed, click "Start Game"</li>
+            <li>In Two Player mode, pass the device between turns</li>
+            <li>Try to find patterns when you get a hit!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
