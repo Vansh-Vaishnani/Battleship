@@ -50,6 +50,12 @@ class BattleshipGame {
     this.enemyBoard = document.getElementById('enemy-board');
     this.playerLabel = document.getElementById('player-label');
     this.enemyLabel = document.getElementById('enemy-label');
+    
+    // Scoreboard
+    this.scoreLabel1 = document.getElementById('score-label-1');
+    this.scoreLabel2 = document.getElementById('score-label-2');
+    this.scoreValue1 = document.getElementById('score-value-1');
+    this.scoreValue2 = document.getElementById('score-value-2');
 
     // Game over
     this.gameOverScreen = document.getElementById('game-over-screen');
@@ -348,6 +354,7 @@ class BattleshipGame {
     this.currentPlayer = this.player1;
     this.opponent = this.player2;
     
+    this.updateScoreboard();
     this.renderGameBoards();
     this.updateGameDisplay();
   }
@@ -436,6 +443,7 @@ class BattleshipGame {
     
     // Update boards immediately
     this.renderGameBoards();
+    this.updateScoreboard();
     
     // Check for game over
     if (this.opponent.gameboard.allShipsSunk()) {
@@ -491,6 +499,7 @@ class BattleshipGame {
     
     // Update boards immediately
     this.renderGameBoards();
+    this.updateScoreboard();
     
     // Check for game over
     if (this.opponent.gameboard.allShipsSunk()) {
@@ -520,6 +529,25 @@ class BattleshipGame {
     
     this.gameMessage.textContent = 'Click on enemy board to attack!';
     this.renderGameBoards();
+  }
+
+  updateScoreboard() {
+    const player1SunkShips = this.player2.gameboard.getSunkShipsCount();
+    const player2SunkShips = this.player1.gameboard.getSunkShipsCount();
+    
+    if (this.gameMode === 'computer') {
+      this.scoreLabel1.textContent = 'Computer Ships Sunk';
+      this.scoreLabel2.textContent = 'Your Ships Sunk';
+      this.scoreValue1.textContent = `${player1SunkShips} / 5`;
+      this.scoreValue2.textContent = `${player2SunkShips} / 5`;
+    } else {
+      const player1Name = 'Player 1';
+      const player2Name = 'Player 2';
+      this.scoreLabel1.textContent = `${player1Name} Ships Sunk`;
+      this.scoreLabel2.textContent = `${player2Name} Ships Sunk`;
+      this.scoreValue1.textContent = `${player1SunkShips} / 5`;
+      this.scoreValue2.textContent = `${player2SunkShips} / 5`;
+    }
   }
 
   endGame() {

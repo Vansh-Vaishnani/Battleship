@@ -638,6 +638,54 @@ h1::after {
   font-size: 1.2em;
 }
 
+/* ===================================
+   SCOREBOARD
+   =================================== */
+
+.scoreboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 40px;
+  padding: 30px;
+  background: rgba(26, 54, 93, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.score-label {
+  color: var(--text-secondary);
+  font-size: 0.95em;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.score-value {
+  color: var(--ocean-blue);
+  font-size: 2.5em;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+}
+
+.score-divider {
+  color: var(--steel-gray);
+  font-size: 1.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 20px;
+}
+
 .boards-container {
   display: flex;
   gap: 40px;
