@@ -8,6 +8,7 @@ class BattleshipGame {
     this.currentPlayer = null;
     this.opponent = null;
     this.isPlacementPhase = true;
+    this.isProcessingTurn = false; // Prevent multiple clicks
     this.shipsToPlace = [
       { name: 'Carrier', length: 5 },
       { name: 'Battleship', length: 4 },
@@ -78,8 +79,10 @@ class BattleshipGame {
     // Info modal
     this.infoBtn.addEventListener('click', () => this.showInfoModal());
     this.closeModal.addEventListener('click', () => this.hideInfoModal());
-    this.infoModal.addEventListener('click', (e) => {
-      if (e.target === this.infoModal) this.hideInfoModal();
+    window.addEventListener('click', (e) => {
+      if (e.target === this.infoModal) {
+        this.hideInfoModal();
+      }
     });
   }
 
@@ -278,15 +281,18 @@ class BattleshipGame {
   }
 
   handleStartGame() {
-    if (this.gameMode === '2player' && this.currentPlayer === this.player1) {
-      // Show pass device screen for player 2
-      this.placementPhase.classList.add('hidden');
+    // Always hide placement phase first
+    this.placementPhase.classList.add('hidden');
+    
+    if (this.gameMode === 'computer') {
+      // Computer mode: place computer ships and start game immediately
+      this.placeComputerShips();
+      this.startGamePhase();
+    } else if (this.gameMode === '2player' && this.currentPlayer === this.player1) {
+      // Two player mode: show pass device screen for player 2
       this.showPassDeviceScreen('Player 2');
     } else {
-      // Computer places ships automatically or player 2 is done
-      if (this.gameMode === 'computer') {
-        this.placeComputerShips();
-      }
+      // Player 2 done placing ships
       this.startGamePhase();
     }
   }
@@ -305,7 +311,8 @@ class BattleshipGame {
       this.opponent = this.player1;
       this.showPlacementPhase();
     } else {
-      // Continue game after pass
+      // Continue game after pass - show game phase
+      this.gamePhase.classList.remove('hidden');
       this.updateGameDisplay();
     }
   }
@@ -346,11 +353,15 @@ class BattleshipGame {
   }
 
   renderGameBoards() {
-    // Render player board
-    this.renderBoard(this.playerBoard, this.currentPlayer, true);
-    
-    // Render enemy board
-    this.renderBoard(this.enemyBoard, this.opponent, false);
+    if (this.gameMode === 'computer') {
+      // In computer mode, always show player1 board on left, player2 (computer) on right
+      this.renderBoard(this.playerBoard, this.player1, true);
+      this.renderBoard(this.enemyBoard, this.player2, false);
+    } else {
+      // In 2-player mode, show current player's board on left, opponent on right
+      this.renderBoard(this.playerBoard, this.currentPlayer, true);
+      this.renderBoard(this.enemyBoard, this.opponent, false);
+    }
   }
 
   renderBoard(boardElement, player, showShips) {
@@ -393,6 +404,11 @@ class BattleshipGame {
   }
 
   handleCellClick(row, col) {
+    // Prevent clicks during processing or computer turn
+    if (this.isProcessingTurn || this.currentPlayer.type === 'computer') {
+      return;
+    }
+    
     const coord = [row, col];
     
     // Check if already attacked
@@ -400,6 +416,9 @@ class BattleshipGame {
       this.gameMessage.textContent = 'Already attacked this cell!';
       return;
     }
+    
+    // Lock turn
+    this.isProcessingTurn = true;
     
     // Perform attack
     this.currentPlayer.attacks.add(coord.toString());
@@ -410,14 +429,13 @@ class BattleshipGame {
     const isHit = this.opponent.gameboard.shipPositions.has(key);
     
     if (isHit) {
-      this.gameMessage.textContent = '💥 Hit!';
-      // Add adjacent targets for smart AI
-      if (this.currentPlayer.type === 'computer') {
-        this.currentPlayer.addAdjacentTargets(coord);
-      }
+      this.gameMessage.textContent = 'Hit!';
     } else {
-      this.gameMessage.textContent = '💧 Miss!';
+      this.gameMessage.textContent = 'Miss!';
     }
+    
+    // Update boards immediately
+    this.renderGameBoards();
     
     // Check for game over
     if (this.opponent.gameboard.allShipsSunk()) {
@@ -425,10 +443,10 @@ class BattleshipGame {
       return;
     }
     
-    // Switch turns
+    // Switch turns after short delay
     setTimeout(() => {
       this.switchTurn();
-    }, 1000);
+    }, 800);
   }
 
   switchTurn() {
@@ -441,6 +459,7 @@ class BattleshipGame {
       this.gamePhase.classList.add('hidden');
       const playerName = this.currentPlayer === this.player1 ? 'Player 1' : 'Player 2';
       this.showPassDeviceScreen(playerName);
+      this.isProcessingTurn = false;
     } else if (this.currentPlayer.type === 'computer') {
       // Computer's turn
       this.turnIndicator.textContent = 'Computer\'s Turn';
@@ -448,9 +467,10 @@ class BattleshipGame {
       
       setTimeout(() => {
         this.computerTurn();
-      }, 1500);
+      }, 1000);
     } else {
       // Player's turn
+      this.isProcessingTurn = false;
       this.updateGameDisplay();
     }
   }
@@ -464,10 +484,13 @@ class BattleshipGame {
     
     if (isHit) {
       this.currentPlayer.addAdjacentTargets(coord);
-      this.gameMessage.textContent = '💥 Computer hit your ship!';
+      this.gameMessage.textContent = 'Computer hit your ship!';
     } else {
-      this.gameMessage.textContent = '💧 Computer missed!';
+      this.gameMessage.textContent = 'Computer missed!';
     }
+    
+    // Update boards immediately
+    this.renderGameBoards();
     
     // Check for game over
     if (this.opponent.gameboard.allShipsSunk()) {
@@ -477,8 +500,9 @@ class BattleshipGame {
     
     // Switch back to player
     setTimeout(() => {
+      this.isProcessingTurn = false;
       this.switchTurn();
-    }, 1500);
+    }, 1000);
   }
 
   updateGameDisplay() {

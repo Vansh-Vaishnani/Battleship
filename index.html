@@ -9,16 +9,25 @@
 <body>
   <div class="container">
     <header>
-      <h1>⚓ Battleship Game</h1>
-      <button id="info-btn" class="info-btn">ℹ️ How to Play</button>
+      <h1>BATTLESHIP</h1>
+      <button id="info-btn" class="info-btn">
+        <span class="icon-info"></span>
+        How to Play
+      </button>
     </header>
 
     <!-- Game Mode Selection -->
     <div id="mode-selection" class="mode-selection">
       <h2>Choose Game Mode</h2>
       <div class="mode-buttons">
-        <button id="vs-computer-btn" class="mode-btn">🤖 Play vs Computer</button>
-        <button id="two-player-btn" class="mode-btn">👥 Two Player Mode</button>
+        <button id="vs-computer-btn" class="mode-btn">
+          <span class="icon-computer"></span>
+          <span>Play vs Computer</span>
+        </button>
+        <button id="two-player-btn" class="mode-btn">
+          <span class="icon-players"></span>
+          <span>Two Player Mode</span>
+        </button>
       </div>
     </div>
 
@@ -89,10 +98,11 @@
     <!-- Pass Device Screen (for 2-player mode) -->
     <div id="pass-device-screen" class="pass-device hidden">
       <div class="pass-device-content">
-        <h2>🔄 Pass Device</h2>
+        <div class="pass-icon"></div>
+        <h2>Pass Device</h2>
         <p id="pass-message">It's Player 2's turn to place ships</p>
         <p class="pass-instruction">Please pass the device to the next player</p>
-        <button id="ready-btn" class="ready-btn">I'm Ready!</button>
+        <button id="ready-btn" class="ready-btn">I'm Ready</button>
       </div>
     </div>
 
@@ -119,7 +129,8 @@
     <!-- Game Over Screen -->
     <div id="game-over-screen" class="game-over hidden">
       <div class="game-over-content">
-        <h2 id="winner-message">🎉 You Win!</h2>
+        <div class="victory-icon"></div>
+        <h2 id="winner-message">Victory!</h2>
         <button id="play-again-btn" class="play-again-btn">Play Again</button>
       </div>
     </div>
@@ -128,15 +139,15 @@
     <div id="info-modal" class="modal hidden">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>📖 How to Play Battleship</h2>
+        <h2>How to Play Battleship</h2>
         
         <div class="info-section">
-          <h3>🎯 Objective</h3>
+          <h3>Objective</h3>
           <p>Sink all of your opponent's ships before they sink yours!</p>
         </div>
 
         <div class="info-section">
-          <h3>🚢 Ships</h3>
+          <h3>Fleet</h3>
           <ul>
             <li><strong>Carrier:</strong> 5 cells</li>
             <li><strong>Battleship:</strong> 4 cells</li>
@@ -147,7 +158,7 @@
         </div>
 
         <div class="info-section">
-          <h3>🎮 How to Play</h3>
+          <h3>Gameplay</h3>
           <ol>
             <li><strong>Choose Game Mode:</strong> Select vs Computer or Two Player</li>
             <li><strong>Place Ships:</strong> Drag and drop ships onto your board. Click a ship to rotate it before placing.</li>
@@ -157,7 +168,7 @@
         </div>
 
         <div class="info-section">
-          <h3>💡 Tips</h3>
+          <h3>Strategy Tips</h3>
           <ul>
             <li>Ships cannot overlap or go outside the board</li>
             <li>Once all ships are placed, click "Start Game"</li>
